@@ -131,7 +131,7 @@ calc_targeting <- function(only_tags) {
     return(targeting_on_each)
 }
 
-relationshipstuff <- "Recently moved|Away|[r|R]elationship|Parents|Partner|Separated|Divorced|Single|Complicated|Married|Engaged|Newlywed|Civil Union|Unspecified"
+relationshipstuff <- "Widowed|Recently moved|Away|[r|R]elationship|Parents|Partner|Separated|Divorced|Single|Complicated|Married|Engaged|Newlywed|Civil Union|Unspecified"
 
 
 add_ribbons <- function(x, adv, col) {
@@ -145,7 +145,7 @@ add_ribbons <- function(x, adv, col) {
                 style = "solid"
             ),
             locations = cells_body(
-                columns = `Numeber of Advertisers`,
+                columns = `Number of Advertisers`,
                 rows = adv
             ))
 }

@@ -58,7 +58,7 @@ library(tidyverse)
 # library(tibble)
 
 color_dat <- tibble(
-  colors = c("#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#bcf60c", "#fabebe", "#008080", "#e6beff", "#9A6324", "#fffac8", "#800000"),
+  colors = c("#e6194B", "#f5911d", "#00008b", "green", "#524fa1", "#ff1a1a", "#f1c851", "#f04949", "#6495ed", "#2598d4", "#89cff0", "#89cff0", "#9A6324", "#fffac8", "#800000"),
   party = c("Drugo", "DCG", "DF", "URA", "DPS", "SDP", "ES!", "SD", "SNP", "UCG", "Vlada Crne Gore", "Demos", "HGI", "LP", "Prava Crna Gora"))
 
 
@@ -80,6 +80,11 @@ scale_color_parties <- function(...){
     )
 }
 
+# election_dat30 %>% 
+#   # filter(party == "Drugo") %>% 
+#   # select(internal_id, page_name) %>% 
+#   # distinct(internal_id, .keep_all = T)
+#   count(party, sort = T)
 ```
 
 
@@ -91,11 +96,11 @@ scale_color_parties <- function(...){
 
 election_dat30 <- readRDS("data/election_dat30.rds") %>% 
     rename(internal_id = page_id) %>% 
-    filter(party != "And")
+    filter(party != "Drugo")
 
 election_dat7 <- readRDS("data/election_dat7.rds") %>% 
     rename(internal_id = page_id) %>% 
-    filter(party != "And")
+    filter(party != "Drugo")
 #     count(coalition)
 
 
@@ -170,7 +175,7 @@ election_dat30 %>%
 
 ## Methodology
 
-In collaboration with [Who Targets Me](https://whotargets.me/), we monitored over 80 Dutch political advertisers during the 2023 Presidential Election to better understand how campaigns use different targeting methods made available by Meta. To do this, we used data from the [Meta Ad Library](https://www.facebook.com/ads/library/), using the new 'Audience' data which gives some detail on how pages target their ads.
+In collaboration with [Who Targets Me](https://whotargets.me/), we monitored over 80 Montenegrin political advertisers during the 2023 Presidential Election to better understand how campaigns use different targeting methods made available by Meta. To do this, we used data from the [Meta Ad Library](https://www.facebook.com/ads/library/), using the new 'Audience' data which gives some detail on how pages target their ads.
 
 To better understand the election, we kept only advertisers who:
 
@@ -180,8 +185,6 @@ To better understand the election, we kept only advertisers who:
 > Note: Meta only provides 7, 30 and 90 days windows for the targeting data in their Ad Library. Meta's data also lags by a few days. We will update this report as soon as new data is available.
 
 ## Topline Statistics  {.tabset .tabset-fade .tabset-pills}
-
-### Meta {.tabset .tabset-fade .tabset-pills}
 
 ```{r}
 # nlsb <- read_csv("data/NL-SpendingsByAdvertisers.csv")
@@ -201,7 +204,7 @@ total_spend_id <- election_dat30 %>%
 #   summarise(total_spend_formatted = sum(total_spend_formatted))
 
 more_data <- dir("data/reports", full.names = T) %>% 
-    map_dfr(~read_csv(.x) %>% mutate(path = .x)) %>% 
+    map_dfr(~read.csv(.x) %>% mutate(path = .x)) %>% 
     mutate(date_produced = str_remove_all(path, "data/reports/FacebookAdLibraryReport_|_NL_yesterday_advertisers\\.csv")) %>% 
     mutate(date_produced = lubridate::ymd(date_produced)) %>% 
     janitor::clean_names()%>% rename(advertiser_id = page_id) %>% 
@@ -355,7 +358,7 @@ add_ribbons2 <- function(x, adv, col) {
 ```
 
 
-#### Daily Spend
+### Daily Spend
 
 
 
@@ -479,7 +482,7 @@ hc_data %>%
 ```
 
 
-#### `r last30days_string` (Last 30 days)
+### `r last30days_string` (Last 30 days)
 
 
 In total, political parties spend €`r scales::comma_format()(sum30$total_spend_formatted)` and ran `r sum30$total_num_ads` ad copies on Meta in this timeframe.
@@ -550,16 +553,22 @@ get_table_dat(election_dat30, party) %>%
   cols_align(
     align = "center"
   ) %>% 
-  gtExtras::gt_theme_538()# %>%
-# add_ribbons("KOK", "#006b99") %>%
-# add_ribbons("VIH", "#339966") %>%
-# add_ribbons("VAS", "#f00032") %>%
-# add_ribbons("PER", "#005b89") %>%
-# add_ribbons("MUUT", "#ffb612") %>%
-# add_ribbons("KES", "#2f72b3") %>%
-# add_ribbons("SDP", "#ee2a2a") %>%
-# add_ribbons("KD", "#1d7fb9") %>%
-# add_ribbons("KOR", "#c41200")
+  gtExtras::gt_theme_538() %>%
+# add_ribbons("Drugo", "#e6194B") %>%
+add_ribbons("DCG", "#f5911d") %>%
+add_ribbons("DF", "#00008b") %>%
+add_ribbons("URA", "green") %>%
+add_ribbons("DPS", "#524fa1") %>%
+add_ribbons("SDP", "#ff1a1a") %>%
+add_ribbons("ES!", "#f1c851") %>%
+add_ribbons("SD", "#f04949") %>%
+add_ribbons("SNP", "#6495ed") %>%
+add_ribbons("UCG", "#2598d4") %>%
+# add_ribbons("Vlada Crne Gore", "#89cff0") %>%
+add_ribbons("Demos", "#89cff0") #%>%
+# add_ribbons("HGI", "#9A6324") %>%
+# add_ribbons("LP", "#fffac8") %>%
+# add_ribbons("Prava Crna Gora", "#800000")
   # tab_options(table.width = pct(100))  #%>%
   # tab_style(
   #   style = cell_borders(
@@ -614,7 +623,7 @@ get_table_dat(election_dat30, party) %>%
 
 
 
-#### `r last7days_string` (Last 7 days)
+### `r last7days_string` (Last 7 days)
 
 In total, political parties spend €`r scales::comma_format()(sum7$total_spend_formatted)` and ran `r sum7$total_num_ads` ad copies on Meta in this timeframe.
 
@@ -633,16 +642,19 @@ get_table_dat(election_dat7, party) %>%
     align = "center"
   ) %>% 
   gtExtras::gt_theme_538() %>% 
-  tab_options(table.width = pct(100))  #%>%
-#   add_ribbons("KOK", "#006b99") %>%
-# add_ribbons("VIH", "#339966") %>%
-# add_ribbons("VAS", "#f00032") %>%
-# add_ribbons("PER", "#005b89") %>%
-# add_ribbons("MUUT", "#ffb612") %>%
-# add_ribbons("KES", "#2f72b3") %>%
-# add_ribbons("SDP", "#ee2a2a") %>%
-# add_ribbons("KD", "#1d7fb9") %>%
-# add_ribbons("KOR", "#c41200")
+  tab_options(table.width = pct(100))%>%
+# add_ribbons("Drugo", "#e6194B") %>%
+add_ribbons("DCG", "#f5911d") %>%
+add_ribbons("DF", "#00008b") %>%
+add_ribbons("URA", "green") %>%
+add_ribbons("DPS", "#524fa1") %>%
+add_ribbons("SDP", "#ff1a1a") %>%
+add_ribbons("ES!", "#f1c851") %>%
+add_ribbons("SD", "#f04949") %>%
+add_ribbons("SNP", "#6495ed") %>%
+add_ribbons("UCG", "#2598d4") %>%
+# add_ribbons("Vlada Crne Gore", "#89cff0") %>%
+add_ribbons("Demos", "#89cff0")
 
 ```
 

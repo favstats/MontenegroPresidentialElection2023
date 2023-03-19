@@ -9,8 +9,11 @@ library(tidyverse)
 tstamp <- Sys.time()
 
 more_data <- dir("data/reports", full.names = T) %>%
-    map_dfr(~read_csv(.x) %>% mutate(path = .x)) %>%
-    mutate(date_produced = str_remove_all(path, "data/reports/FacebookAdLibraryReport_|_NL_yesterday_advertisers\\.csv")) %>%
+    map_dfr(~{print(.x)
+        yo <- read.csv(.x) %>% mutate(path = .x)
+        return(yo)
+            }) %>%
+    mutate(date_produced = str_remove_all(path, "data/reports/FacebookAdLibraryReport_|_ME_yesterday_advertisers\\.csv")) %>%
     mutate(date_produced = lubridate::ymd(date_produced)) %>%
     janitor::clean_names()%>% #rename(advertiser_id = page_id) %>%
     mutate(spend = readr::parse_number(amount_spent_eur)) %>%
@@ -264,17 +267,23 @@ scraper <- possibly(scraper, otherwise = NULL, quiet = F)
 # da30 <- readRDS("data/election_dat30.rds")
 # da7 <- readRDS("data/election_dat7.rds")
 
+already_there <- dir("provincies/7", full.names = T) %>% 
+  str_remove_all("provincies/7/|\\.rds")
+
 ### save seperately
 yo <- all_dat %>% #count(cntry, sort  =T) %>%
-    # filter(!(page_id %in% already_there)) %>%
+    filter(!(page_id %in% already_there)) %>%
   # filter(!(page_id %in% unique(da7$page_id))) %>%
   # filter(cntry == "GB") %>%
   # slice(1:10) %>%
   split(1:nrow(.)) %>%
   map_dfr_progress(scraper, 7)
 
+already_there <- dir("provincies/30", full.names = T) %>% 
+  str_remove_all("provincies/30/|\\.rds")
+
 yo <- all_dat %>% #count(cntry, sort  =T) %>%
-    # filter(!(page_id %in% already_there)) %>%
+    filter(!(page_id %in% already_there)) %>%
     # filter(!(page_id %in% unique(da30$page_id))) %>%
     # filter(cntry == "GB") %>%
     # slice(1:10) %>%
