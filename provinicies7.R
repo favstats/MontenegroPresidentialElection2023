@@ -272,7 +272,7 @@ already_there <- dir("provincies/7", full.names = T) %>%
 
 ### save seperately
 yo <- all_dat %>% #count(cntry, sort  =T) %>%
-    filter(!(page_id %in% already_there)) %>%
+    # filter(!(page_id %in% already_there)) %>%
   # filter(!(page_id %in% unique(da7$page_id))) %>%
   # filter(cntry == "GB") %>%
   # slice(1:10) %>%
@@ -283,7 +283,7 @@ already_there <- dir("provincies/30", full.names = T) %>%
   str_remove_all("provincies/30/|\\.rds")
 
 yo <- all_dat %>% #count(cntry, sort  =T) %>%
-    filter(!(page_id %in% already_there)) %>%
+    # filter(!(page_id %in% already_there)) %>%
     # filter(!(page_id %in% unique(da30$page_id))) %>%
     # filter(cntry == "GB") %>%
     # slice(1:10) %>%
