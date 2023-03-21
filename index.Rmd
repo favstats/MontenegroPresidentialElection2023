@@ -58,7 +58,7 @@ library(tidyverse)
 # library(tibble)
 
 color_dat <- tibble(
-  colors = c("#e6194B", "#f5911d", "#00008b", "green", "#524fa1", "#ff1a1a", "#f1c851", "#f04949", "#6495ed", "#2598d4", "#89cff0", "#89cff0", "#9A6324", "#fffac8", "#800000"),
+  colors = c("#e6194B", "#f5911d", "#00008b", "#00FF00", "#524fa1", "#ff1a1a", "#f1c851", "#f04949", "#6495ed", "#2598d4", "#89cff0", "#89cff0", "#9A6324", "#fffac8", "#800000"),
   party = c("Drugo", "DCG", "DF", "URA", "DPS", "SDP", "ES!", "SD", "SNP", "UCG", "Vlada Crne Gore", "Demos", "HGI", "LP", "Prava Crna Gora"))
 
 
@@ -1210,6 +1210,112 @@ election_dat7 %>%
 ```
 
 
+
+
+## Geo Targeting {.tabset .tabset-fade .tabset-pills}
+
+### `r last30days_string` (Last 30 days) {.tabset .tabset-fade .tabset-pills}
+
+#### Regions
+
+```{r,fig.width=10, fig.height=8}
+library(treemap)
+region_dat <- election_dat30 %>%
+  filter(type == "location") %>%
+  filter(location_type == "regions") %>%
+  filter(!is_exclusion)  %>%
+  mutate(likely_together = paste0(total_spend_pct,num_ads) %>% as.factor() %>% as.numeric()) %>%
+  group_by(internal_id) %>%
+  add_count(likely_together, name = "n_clusters") %>%
+  ungroup() %>%
+  mutate(total_spend_formatted = total_spend_formatted*total_spend_pct) %>%
+  mutate(total_spend_formatted = total_spend_formatted/n_clusters) %>%
+  group_by(party, value) %>%
+  summarise(total_spend_formatted = sum(total_spend_formatted),
+            num_ads = sum(num_ads)) %>%
+  ungroup() %>%
+  rename(region = value) %>%
+  mutate(region = str_remove_all(region, ", Montenegro")) 
+
+the_colors <- region_dat %>% 
+  group_by(party) %>% 
+  summarize(total_spend_formatted = sum(total_spend_formatted)) %>% 
+  ungroup() %>% 
+  mutate(party = fct_relevel(party)) %>% 
+  left_join(color_dat) %>% 
+  arrange(party) %>% 
+  drop_na(colors) %>% 
+  pull(colors)
+
+## Static version
+tm <- treemap(region_dat, index = c("party", "region"),
+              vSize = "total_spend_formatted", 
+              vColor = "party",
+              type = "index",
+              title = "",
+                  align.labels=list(
+        c("right", "bottom"),
+        c("center", "center")
+        ),
+                  fontsize.labels=c(21,10),                # size of labels. Give the size per level of aggregation: size for group, size for subgroup, sub-subgroups...
+
+                  fontcolor.labels=c("white","white"),    # Color of labels
+              palette = the_colors)
+
+
+
+```
+
+
+#### Cities
+
+```{r,fig.width=10, fig.height=8}
+library(treemap)
+region_dat <- election_dat30 %>%
+  filter(type == "location") %>%
+  filter(location_type == "CITY") %>%
+  filter(!is_exclusion)  %>%
+  mutate(likely_together = paste0(total_spend_pct,num_ads) %>% as.factor() %>% as.numeric()) %>%
+  group_by(internal_id) %>%
+  add_count(likely_together, name = "n_clusters") %>%
+  ungroup() %>%
+  mutate(total_spend_formatted = total_spend_formatted*total_spend_pct) %>%
+  mutate(total_spend_formatted = total_spend_formatted/n_clusters) %>%
+  group_by(party, value) %>%
+  summarise(total_spend_formatted = sum(total_spend_formatted),
+            num_ads = sum(num_ads)) %>%
+  ungroup() %>%
+  rename(region = value) %>%
+  mutate(region = str_remove_all(region, ", Montenegro")) 
+
+the_colors <- region_dat %>% 
+  group_by(party) %>% 
+  summarize(total_spend_formatted = sum(total_spend_formatted)) %>% 
+  ungroup() %>% 
+  mutate(party = fct_relevel(party)) %>% 
+  left_join(color_dat) %>% 
+  arrange(party) %>% 
+  drop_na(colors) %>% 
+  pull(colors)
+
+## Static version
+tm <- treemap(region_dat, index = c("party", "region"),
+              vSize = "total_spend_formatted", 
+              vColor = "party",
+              type = "index",
+              title = "",
+                  align.labels=list(
+        c("right", "bottom"),
+        c("center", "center")
+        ),
+                  fontsize.labels=c(21,10),                # size of labels. Give the size per level of aggregation: size for group, size for subgroup, sub-subgroups...
+
+                  fontcolor.labels=c("white","white"),    # Color of labels
+              palette = the_colors)
+
+
+
+```
 
 ## Age Targeting {.tabset .tabset-fade .tabset-pills}
 
