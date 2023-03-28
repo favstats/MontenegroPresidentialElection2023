@@ -652,7 +652,7 @@ add_ribbons("SDP", "#ff1a1a") %>%
 add_ribbons("ES!", "#f1c851") %>%
 add_ribbons("SD", "#f04949") %>%
 add_ribbons("SNP", "#6495ed") %>%
-add_ribbons("UCG", "#2598d4") %>%
+# add_ribbons("UCG", "#2598d4") #%>%
 # add_ribbons("Vlada Crne Gore", "#89cff0") %>%
 add_ribbons("Demos", "#89cff0")
 
