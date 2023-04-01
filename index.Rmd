@@ -1637,39 +1637,39 @@ election_dat30 %>%
 ```
 
 
-### `r last7days_string` (Last 7 days)
+<!-- ### `r last7days_string` (Last 7 days) -->
 
-```{r, fig.width=14, fig.height=9, dpi=300}
-
-
-election_dat7 %>% 
-    group_split(party) %>% 
-    map_dfr(calc_jobs_perc) %>% 
-    filter(perc >= 0.015) %>% 
-    filter(str_detect(value, relationshipstuff, negate = T)) %>% 
-     # mutate(coalition = fct_relevel(coalition, c("Coalizione di centro-sinistra",
-     #                              "Terzo Polo",
-     #                              "Coalizione di centro-destra"))) %>% 
-    mutate(value = fct_reorder(value, perc)) %>% 
-    ggplot(aes(value, perc, fill = party)) +
-    geom_col(alpha = 0.8) +
-    facet_wrap(~party, scales = "free") +
-    coord_flip() +
-    ggthemes::theme_hc() +
-    # scale_fill_manual(values = c("#ef3e3e", "#0039aa", "#0a6be1")) +
-    theme(legend.position = "none",
-          panel.spacing=unit(1,"lines")) +
-    scale_y_continuous(labels = scales::percent) +
-    # scale_x_discrete(breaks = c("18", "24",
-    #                             "34", "44",
-    #                             "54", "65+")) +
-    labs(y = "% Budget Spend on Jobs") +
-    labs(x = "Job (Sectors)\n")  +
-  geom_text(size = 3.5, color = "black", vjust="inward",hjust="inward",
-             aes(y = perc, label = paste0(round(perc*100, 1), "%")))  +
-    scale_x_discrete(label = function(x) stringr::str_trunc(x, 22)) +
-    scale_fill_parties()
-    
+<!-- ```{r, fig.width=14, fig.height=9, dpi=300} -->
 
 
-```
+<!-- election_dat7 %>%  -->
+<!--     group_split(party) %>%  -->
+<!--     map_dfr(calc_jobs_perc) %>%  -->
+<!--     filter(perc >= 0.015) %>%  -->
+<!--     filter(str_detect(value, relationshipstuff, negate = T)) %>%  -->
+<!--      # mutate(coalition = fct_relevel(coalition, c("Coalizione di centro-sinistra", -->
+<!--      #                              "Terzo Polo", -->
+<!--      #                              "Coalizione di centro-destra"))) %>%  -->
+<!--     mutate(value = fct_reorder(value, perc)) %>%  -->
+<!--     ggplot(aes(value, perc, fill = party)) + -->
+<!--     geom_col(alpha = 0.8) + -->
+<!--     facet_wrap(~party, scales = "free") + -->
+<!--     coord_flip() + -->
+<!--     ggthemes::theme_hc() + -->
+<!--     # scale_fill_manual(values = c("#ef3e3e", "#0039aa", "#0a6be1")) + -->
+<!--     theme(legend.position = "none", -->
+<!--           panel.spacing=unit(1,"lines")) + -->
+<!--     scale_y_continuous(labels = scales::percent) + -->
+<!--     # scale_x_discrete(breaks = c("18", "24", -->
+<!--     #                             "34", "44", -->
+<!--     #                             "54", "65+")) + -->
+<!--     labs(y = "% Budget Spend on Jobs") + -->
+<!--     labs(x = "Job (Sectors)\n")  + -->
+<!--   geom_text(size = 3.5, color = "black", vjust="inward",hjust="inward", -->
+<!--              aes(y = perc, label = paste0(round(perc*100, 1), "%")))  + -->
+<!--     scale_x_discrete(label = function(x) stringr::str_trunc(x, 22)) + -->
+<!--     scale_fill_parties() -->
+
+
+
+<!-- ``` -->
